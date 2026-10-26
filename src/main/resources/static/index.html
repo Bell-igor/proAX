@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ProAX — B2B-экосистема: поставщики, производство, логистика, склады, юристы</title>
+    <meta name="description" content="ProAX — единая площадка для всей производственной цепочки: сырьё и материалы, производство, логистика, склады, оборудование, юристы, финансы и сервисы.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230D1522'/><path d='M9 24V8h7a5 5 0 0 1 0 10h-3v6z' fill='%23C8F169'/></svg>">
+    <link rel="stylesheet" href="/css/styles.css?v=1">
+</head>
+<body>
+<div id="app">
+    <header class="site-header">
+        <div class="container site-header__inner">
+            <a class="brand" href="#/">
+                <span class="brand__mark">P</span>
+                <span class="brand__text">ProAX<span class="brand__dot">.</span></span>
+                <span class="brand__tag">b2b-экосистема</span>
+            </a>
+
+            <nav class="nav" id="main-nav">
+                <a class="nav__link" href="#/catalog">Каталог</a>
+                <a class="nav__link" href="#/industries">Отрасли</a>
+                <a class="nav__link" href="#/needs">Заявки</a>
+                <a class="nav__link" href="#/how">Как это работает</a>
+            </nav>
+
+            <div class="site-header__actions" id="auth-zone">
+                <a class="btn btn--ghost btn--sm" href="#/login">Войти</a>
+                <a class="btn btn--primary btn--sm" href="#/register">Разместить компанию</a>
+            </div>
+
+            <button class="menu-toggle" id="menu-toggle" aria-label="Меню" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <main id="view" class="view"></main>
+
+    <footer class="site-footer">
+        <div class="container site-footer__inner">
+            <div class="site-footer__brand">
+                <div class="brand brand--footer">
+                    <span class="brand__mark">P</span>
+                    <span class="brand__text">ProAX<span class="brand__dot">.</span></span>
+                </div>
+                <p class="muted">Одна площадка для всей производственной цепочки: от сырья до юридического сопровождения сделки.</p>
+            </div>
+            <div class="site-footer__cols">
+                <div>
+                    <h4>Площадка</h4>
+                    <a href="#/catalog">Каталог компаний</a>
+                    <a href="#/needs">Лента заявок</a>
+                    <a href="#/industries">Отрасли</a>
+                </div>
+                <div>
+                    <h4>Участникам</h4>
+                    <a href="#/register">Регистрация компании</a>
+                    <a href="#/cabinet">Личный кабинет</a>
+                    <a href="#/how">Как это работает</a>
+                </div>
+                <div>
+                    <h4>Демо-доступ</h4>
+                    <span class="muted">Компания: demo@proax.ru / demo123</span>
+                    <span class="muted">Админ: admin@proax.ru / admin123</span>
+                </div>
+            </div>
+        </div>
+        <div class="container site-footer__bottom">
+            <span class="muted">© <span id="footer-year"></span> ProAX. Демонстрационный проект на Java и Spring Boot.</span>
+            <span class="muted">Сделано для проверки сценариев B2B-платформы</span>
+        </div>
+    </footer>
+</div>
+
+<div id="toasts" class="toasts" aria-live="polite"></div>
+<div id="modal-root"></div>
+
+<script type="module" src="/js/app.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: proax
+  datasource:
+    url: jdbc:h2:file:./data/proax
+    username: sa
+    password: ""
+    driver-class-name: org.h2.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          max-age: 0
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 8MB
+
+server:
+  port: 8080
+  compression:
+    enabled: true
+  error:
+    whitelabel:
+      enabled: false
+
+logging:
+  level:
+    root: INFO
+
+proax:
+  demo-data: true

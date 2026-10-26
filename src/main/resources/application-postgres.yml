@@ -1,0 +1,19 @@
+# Профиль для PostgreSQL: запуск с --spring.profiles.active=postgres
+# Перед запуском создайте базу и пользователя, например:
+#   CREATE DATABASE proax;
+#   CREATE USER proax WITH PASSWORD 'proax';
+#   GRANT ALL PRIVILEGES ON DATABASE proax TO proax;
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/proax
+    username: proax
+    password: proax
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
