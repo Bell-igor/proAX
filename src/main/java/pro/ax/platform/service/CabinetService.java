@@ -22,17 +22,20 @@ public class CabinetService {
     private final FavoriteService favoriteService;
     private final ChatService chatService;
     private final DocumentService documentService;
+    private final LegalApplicationService legalApplicationService;
     private final DtoMapper mapper;
 
     public CabinetService(CompanyService companyService, NeedService needService,
                           ProposalService proposalService, FavoriteService favoriteService,
-                          ChatService chatService, DocumentService documentService, DtoMapper mapper) {
+                          ChatService chatService, DocumentService documentService,
+                          LegalApplicationService legalApplicationService, DtoMapper mapper) {
         this.companyService = companyService;
         this.needService = needService;
         this.proposalService = proposalService;
         this.favoriteService = favoriteService;
         this.chatService = chatService;
         this.documentService = documentService;
+        this.legalApplicationService = legalApplicationService;
         this.mapper = mapper;
     }
 
@@ -51,7 +54,8 @@ public class CabinetService {
                 proposalService.myProposals(user),
                 favoriteService.list(user),
                 company.map(entity -> documentService.listFor(entity.getId())).orElse(List.of()),
-                chatService.countFor(user)
+                chatService.countFor(user),
+                legalApplicationService.pendingForProvider(user)
         );
     }
 }

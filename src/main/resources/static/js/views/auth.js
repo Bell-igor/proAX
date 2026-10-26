@@ -3,9 +3,9 @@ import { esc, toast, markFields } from '../ui.js';
 import { setUser } from '../store.js';
 import { navigate } from '../router.js';
 
-async function finish(user, query) {
+async function finish(user, query, fallback) {
     setUser(user);
-    const next = query.next ? `/${String(query.next).replace(/^\//, '')}` : (user.admin ? '/admin' : '/cabinet');
+    const next = query.next ? `/${String(query.next).replace(/^\//, '')}` : fallback;
     navigate(next);
 }
 
@@ -13,7 +13,7 @@ export async function login({ root, query }) {
     root.innerHTML = `<div class="auth-wrap"><div class="container">
         <div class="auth-card">
             <h1>Вход в ProAX</h1>
-            <p>Войдите, чтобы управлять профилем компании, публиковать заявки и откликаться на потребности.</p>
+            <p>Войдите, чтобы управлять профилем, публиковать заявки и оформлять юридический статус.</p>
             <form id="login-form" novalidate>
                 <div class="form-error hidden"></div>
                 <div class="field">
@@ -32,6 +32,9 @@ export async function login({ root, query }) {
             <div class="divider"></div>
             <p class="small muted mb-0">Демо-доступ:</p>
             <div class="row mt-16">
+                <button class="btn btn--outline btn--sm" type="button" data-demo="person@proax.ru|person123">
+                    Частное лицо
+                </button>
                 <button class="btn btn--outline btn--sm" type="button" data-demo="demo@proax.ru|demo123">
                     Компания «УралМеталл»
                 </button>
@@ -39,8 +42,10 @@ export async function login({ root, query }) {
                     Администратор
                 </button>
             </div>
+            <p class="muted small mt-16 mb-0">Юрфирма (исполнитель заявок): <code>e.radova@example.ru</code>
+                / <code>demo123</code> — «Право и Контур».</p>
 
-            <div class="auth-switch">Нет аккаунта? <a href="#/register">Зарегистрировать компанию</a></div>
+            <div class="auth-switch">Нет аккаунта? <a href="#/register">Зарегистрироваться</a></div>
         </div>
     </div></div>`;
 
@@ -52,7 +57,8 @@ export async function login({ root, query }) {
         try {
             const user = await api.login({ email, password });
             toast(`Добро пожаловать, ${user.displayName}`);
-            await finish(user, query);
+            const fallback = user.admin ? '/admin' : (user.companyId ? '/cabinet' : '/legal');
+            await finish(user, query, fallback);
         } catch (error) {
             errorBox.textContent = error.message;
             errorBox.classList.remove('hidden');
@@ -77,108 +83,211 @@ export async function login({ root, query }) {
 }
 
 export async function register({ root, query }) {
-    root.innerHTML = `<div class="auth-wrap"><div class="container"><div class="auth-card auth-card--wide">
-        <div class="skeleton" style="height:300px"></div></div></div></div>`;
-
+    let mode = query.type === 'company' ? 'company' : 'person';
     const industries = await api.industries();
 
-    root.innerHTML = `<div class="auth-wrap"><div class="container">
-        <div class="auth-card auth-card--wide">
-            <h1>Разместить компанию</h1>
-            <p>Аккаунт представителя и карточка компании создаются одновременно. После регистрации профиль
-                появится в каталоге, а вы сможете публиковать заявки и откликаться.</p>
-            <form id="register-form" novalidate>
-                <div class="form-error hidden"></div>
+    const render = () => {
+        root.innerHTML = `<div class="auth-wrap"><div class="container">
+            <div class="auth-card ${mode === 'company' ? 'auth-card--wide' : ''}">
+                <h1>${mode === 'person' ? 'Начать с аккаунта частного лица' : 'Разместить компанию'}</h1>
+                <p>${mode === 'person'
+                    ? 'Аккаунт без юридического статуса: выберите юрфирму на площадке, оформите ИП или ООО, '
+                      + 'а затем получите карточку компании для сдачи актива или продажи.'
+                    : 'Аккаунт представителя и карточка компании создаются одновременно. Профиль появится '
+                      + 'в каталоге, а вы сможете публиковать заявки и откликаться.'}</p>
 
-                <div class="form-note">Шаг 1 · Аккаунт представителя</div>
-                <div class="form-grid">
-                    <div class="field">
-                        <label class="field__label" for="reg-name">Имя и фамилия <span class="req">*</span></label>
-                        <input class="input" id="reg-name" name="displayName" maxlength="120" required
-                               placeholder="Игорь Соколов">
-                    </div>
-                    <div class="field">
-                        <label class="field__label" for="reg-email">Рабочий e-mail <span class="req">*</span></label>
-                        <input class="input" id="reg-email" name="email" type="email" maxlength="180" required
-                               autocomplete="email" placeholder="you@company.ru">
-                    </div>
-                    <div class="field">
-                        <label class="field__label" for="reg-password">Пароль <span class="req">*</span></label>
-                        <input class="input" id="reg-password" name="password" type="password" minlength="6"
-                               maxlength="72" required autocomplete="new-password" placeholder="Минимум 6 символов">
-                    </div>
-                    <div class="field">
-                        <label class="field__label" for="reg-phone">Телефон</label>
-                        <input class="input" id="reg-phone" name="phone" maxlength="40" placeholder="+7 (343) 000-00-00">
-                    </div>
+                <div class="auth-tabs">
+                    <button type="button" class="auth-tab ${mode === 'person' ? 'is-active' : ''}"
+                            data-mode="person">Я частное лицо</button>
+                    <button type="button" class="auth-tab ${mode === 'company' ? 'is-active' : ''}"
+                            data-mode="company">У меня есть компания</button>
                 </div>
 
-                <div class="form-note mt-24">Шаг 2 · Карточка компании</div>
-                <div class="form-grid">
-                    <div class="field">
-                        <label class="field__label" for="reg-company">Название компании <span class="req">*</span></label>
-                        <input class="input" id="reg-company" name="companyName" maxlength="160" required
-                               placeholder="ООО «УралМеталл»">
-                    </div>
-                    <div class="field">
-                        <label class="field__label" for="reg-industry">Отрасль <span class="req">*</span></label>
-                        <select class="select" id="reg-industry" name="industryCode" required>
-                            ${industries.map((industry) =>
-                                `<option value="${esc(industry.code)}">${esc(industry.title)}</option>`).join('')}
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label class="field__label" for="reg-city">Город</label>
-                        <input class="input" id="reg-city" name="city" maxlength="80" placeholder="Екатеринбург">
-                    </div>
-                    <div class="field">
-                        <label class="field__label" for="reg-website">Сайт</label>
-                        <input class="input" id="reg-website" name="website" maxlength="255" placeholder="company.ru">
-                    </div>
-                    <div class="field field--full">
-                        <label class="field__label" for="reg-description">Чем занимается компания</label>
-                        <textarea class="textarea" id="reg-description" name="description" maxlength="4000"
-                                  placeholder="Опишите продукты, услуги, регионы работы и опыт"></textarea>
-                    </div>
-                </div>
+                ${mode === 'person' ? personForm() : companyForm(industries)}
+                <div class="auth-switch">Уже есть аккаунт? <a href="#/login">Войти</a></div>
+            </div>
+        </div></div>`;
 
-                <button class="btn btn--primary btn--block" type="submit">Создать аккаунт и компанию</button>
-                <p class="muted small center mt-16 mb-0">Регистрируясь, вы подтверждаете, что представляете указанную компанию.</p>
-            </form>
-            <div class="auth-switch">Уже есть аккаунт? <a href="#/login">Войти</a></div>
-        </div>
-    </div></div>`;
-
-    const form = root.querySelector('#register-form');
-    form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const errorBox = form.querySelector('.form-error');
-        errorBox.classList.add('hidden');
-        const payload = Object.fromEntries(new FormData(form).entries());
-        const button = form.querySelector('button[type="submit"]');
-        button.disabled = true;
-        button.textContent = 'Создаём…';
-        try {
-            const user = await api.register({
-                email: payload.email,
-                password: payload.password,
-                displayName: payload.displayName,
-                companyName: payload.companyName,
-                industryCode: payload.industryCode,
-                city: payload.city || null,
-                description: payload.description || null,
-                website: payload.website || null,
-                phone: payload.phone || null
+        root.querySelectorAll('[data-mode]').forEach((button) => {
+            button.addEventListener('click', () => {
+                mode = button.dataset.mode;
+                render();
             });
-            toast('Компания создана. Добро пожаловать в ProAX!');
-            await finish(user, query);
-        } catch (error) {
-            errorBox.textContent = error.message;
-            errorBox.classList.remove('hidden');
-            markFields(form, error.fields);
-        } finally {
-            button.disabled = false;
-            button.textContent = 'Создать аккаунт и компанию';
-        }
-    });
+        });
+
+        if (mode === 'person') bindPersonForm(); else bindCompanyForm();
+    };
+
+    const bindPersonForm = () => {
+        const form = root.querySelector('#register-form');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const errorBox = form.querySelector('.form-error');
+            errorBox.classList.add('hidden');
+            const payload = Object.fromEntries(new FormData(form).entries());
+            const button = form.querySelector('button[type="submit"]');
+            button.disabled = true;
+            button.textContent = 'Создаём…';
+            try {
+                const user = await api.registerPerson({
+                    email: payload.email,
+                    password: payload.password,
+                    displayName: payload.displayName,
+                    phone: payload.phone || null,
+                    city: payload.city || null
+                });
+                toast('Аккаунт создан. Выберите юрфирму для оформления статуса.');
+                await finish(user, query, '/legal');
+            } catch (error) {
+                errorBox.textContent = error.message;
+                errorBox.classList.remove('hidden');
+                markFields(form, error.fields);
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Создать аккаунт';
+            }
+        });
+    };
+
+    const bindCompanyForm = () => {
+        const form = root.querySelector('#register-form');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const errorBox = form.querySelector('.form-error');
+            errorBox.classList.add('hidden');
+            const payload = Object.fromEntries(new FormData(form).entries());
+            const button = form.querySelector('button[type="submit"]');
+            button.disabled = true;
+            button.textContent = 'Создаём…';
+            try {
+                const user = await api.register({
+                    email: payload.email,
+                    password: payload.password,
+                    displayName: payload.displayName,
+                    companyName: payload.companyName,
+                    industryCode: payload.industryCode,
+                    city: payload.city || null,
+                    description: payload.description || null,
+                    website: payload.website || null,
+                    phone: payload.phone || null
+                });
+                toast('Компания создана. Добро пожаловать в ProAX!');
+                await finish(user, query, '/cabinet');
+            } catch (error) {
+                errorBox.textContent = error.message;
+                errorBox.classList.remove('hidden');
+                markFields(form, error.fields);
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Создать аккаунт и компанию';
+            }
+        });
+    };
+
+    render();
+}
+
+function personForm() {
+    return `<form id="register-form" novalidate>
+        <div class="form-error hidden"></div>
+        <div class="form-grid">
+            <div class="field">
+                <label class="field__label" for="reg-name">Имя и фамилия <span class="req">*</span></label>
+                <input class="input" id="reg-name" name="displayName" maxlength="120" required
+                       placeholder="Иван Петров">
+            </div>
+            <div class="field">
+                <label class="field__label" for="reg-email">E-mail <span class="req">*</span></label>
+                <input class="input" id="reg-email" name="email" type="email" maxlength="180" required
+                       autocomplete="email" placeholder="you@mail.ru">
+            </div>
+            <div class="field">
+                <label class="field__label" for="reg-password">Пароль <span class="req">*</span></label>
+                <input class="input" id="reg-password" name="password" type="password" minlength="6"
+                       maxlength="72" required autocomplete="new-password" placeholder="Минимум 6 символов">
+            </div>
+            <div class="field">
+                <label class="field__label" for="reg-city">Город</label>
+                <input class="input" id="reg-city" name="city" maxlength="80" list="city-list"
+                       placeholder="Екатеринбург">
+                <datalist id="city-list">
+                    ${['Екатеринбург', 'Москва', 'Санкт-Петербург', 'Казань', 'Новосибирск', 'Челябинск',
+                        'Нижний Новгород', 'Ростов-на-Дону', 'Самара', 'Уфа', 'Пермь', 'Воронеж']
+                        .map((city) => `<option value="${city}"></option>`).join('')}
+                </datalist>
+                <span class="field__hint">По городу площадка подбирает юрфирмы рядом</span>
+            </div>
+            <div class="field field--full">
+                <label class="field__label" for="reg-phone">Телефон</label>
+                <input class="input" id="reg-phone" name="phone" maxlength="40" placeholder="+7 (343) 000-00-00">
+            </div>
+        </div>
+        <div class="form-note">
+            Регистрация как частное лицо не требует юридического статуса. Следующий шаг — выбрать
+            юрфирму и оформить ИП, ООО или самозанятость прямо на площадке.
+        </div>
+        <button class="btn btn--primary btn--block" type="submit">Создать аккаунт</button>
+    </form>`;
+}
+
+function companyForm(industries) {
+    return `<form id="register-form" novalidate>
+        <div class="form-error hidden"></div>
+
+        <div class="form-note">Шаг 1 · Аккаунт представителя</div>
+        <div class="form-grid">
+            <div class="field">
+                <label class="field__label" for="reg-name">Имя и фамилия <span class="req">*</span></label>
+                <input class="input" id="reg-name" name="displayName" maxlength="120" required
+                       placeholder="Игорь Соколов">
+            </div>
+            <div class="field">
+                <label class="field__label" for="reg-email">Рабочий e-mail <span class="req">*</span></label>
+                <input class="input" id="reg-email" name="email" type="email" maxlength="180" required
+                       autocomplete="email" placeholder="you@company.ru">
+            </div>
+            <div class="field">
+                <label class="field__label" for="reg-password">Пароль <span class="req">*</span></label>
+                <input class="input" id="reg-password" name="password" type="password" minlength="6"
+                       maxlength="72" required autocomplete="new-password" placeholder="Минимум 6 символов">
+            </div>
+            <div class="field">
+                <label class="field__label" for="reg-phone">Телефон</label>
+                <input class="input" id="reg-phone" name="phone" maxlength="40" placeholder="+7 (343) 000-00-00">
+            </div>
+        </div>
+
+        <div class="form-note mt-24">Шаг 2 · Карточка компании</div>
+        <div class="form-grid">
+            <div class="field">
+                <label class="field__label" for="reg-company">Название компании <span class="req">*</span></label>
+                <input class="input" id="reg-company" name="companyName" maxlength="160" required
+                       placeholder="ООО «УралМеталл»">
+            </div>
+            <div class="field">
+                <label class="field__label" for="reg-industry">Отрасль <span class="req">*</span></label>
+                <select class="select" id="reg-industry" name="industryCode" required>
+                    ${industries.map((industry) =>
+                        `<option value="${esc(industry.code)}">${esc(industry.title)}</option>`).join('')}
+                </select>
+            </div>
+            <div class="field">
+                <label class="field__label" for="reg-city">Город</label>
+                <input class="input" id="reg-city" name="city" maxlength="80" placeholder="Екатеринбург">
+            </div>
+            <div class="field">
+                <label class="field__label" for="reg-website">Сайт</label>
+                <input class="input" id="reg-website" name="website" maxlength="255" placeholder="company.ru">
+            </div>
+            <div class="field field--full">
+                <label class="field__label" for="reg-description">Чем занимается компания</label>
+                <textarea class="textarea" id="reg-description" name="description" maxlength="4000"
+                          placeholder="Опишите продукты, услуги, регионы работы и опыт"></textarea>
+            </div>
+        </div>
+
+        <button class="btn btn--primary btn--block" type="submit">Создать аккаунт и компанию</button>
+        <p class="muted small center mt-16 mb-0">Регистрируясь, вы подтверждаете, что представляете
+            указанную компанию.</p>
+    </form>`;
 }

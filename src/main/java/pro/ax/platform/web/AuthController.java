@@ -12,6 +12,7 @@ import pro.ax.platform.security.AuthService;
 import pro.ax.platform.service.AccountService;
 import pro.ax.platform.service.CompanyService;
 import pro.ax.platform.web.dto.LoginForm;
+import pro.ax.platform.web.dto.PersonRegisterForm;
 import pro.ax.platform.web.dto.RegisterForm;
 import pro.ax.platform.web.dto.UserDto;
 
@@ -39,6 +40,14 @@ public class AuthController {
         User user = accountService.register(form);
         authService.login(session, user);
         return mapper.user(user, companyService.findMyCompany(user).orElse(null));
+    }
+
+    /** Регистрация частного лица: без компании, со статусом PERSON. */
+    @PostMapping("/register-person")
+    public UserDto registerPerson(@Valid @RequestBody PersonRegisterForm form, HttpSession session) {
+        User user = accountService.registerPerson(form);
+        authService.login(session, user);
+        return mapper.user(user, null);
     }
 
     @PostMapping("/login")

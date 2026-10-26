@@ -11,6 +11,7 @@ import pro.ax.platform.repo.CompanyRepository;
 import pro.ax.platform.repo.UserRepository;
 import pro.ax.platform.security.PasswordHasher;
 import pro.ax.platform.support.Slugifier;
+import pro.ax.platform.web.dto.PersonRegisterForm;
 import pro.ax.platform.web.dto.RegisterForm;
 
 import java.util.List;
@@ -58,6 +59,41 @@ public class AccountService {
         companies.save(company);
 
         return user;
+    }
+
+    /** Регистрация частного лица: аккаунт без компании, со статусом PERSON. */
+    @Transactional
+    public User registerPerson(PersonRegisterForm form) {
+        String email = form.email().trim().toLowerCase(Locale.ROOT);
+        if (users.existsByEmailIgnoreCase(email)) {
+            throw ApiException.conflict("Пользователь с таким e-mail уже зарегистрирован");
+        }
+        User user = new User(email, hasher.hash(form.password()), form.displayName().trim(), Role.PERSON);
+        user.setCity(trimToNull(form.city()));
+        user.setPhone(trimToNull(form.phone()));
+        users.save(user);
+        return user;
+    }
+
+    /** Создание карточки компании и повышение статуса до юрлица. */
+    @Transactional
+    public Company createCompany(User owner, String name, String industryCode, String city) {
+        if (companies.findByOwnerId(owner.getId()).isPresent()) {
+            throw ApiException.conflict("У аккаунта уже есть карточка компании");
+        }
+        Industry industry = industryService.require(industryCode);
+        String cleanName = name == null || name.isBlank() ? "Компания " + owner.getDisplayName() : name.trim();
+
+        Company company = new Company(cleanName, uniqueSlug(cleanName), industry);
+        company.setCity(trimToNull(city));
+        company.setOwner(owner);
+        company.setEmail(owner.getEmail());
+        company.setAccentColor(accentFor(cleanName));
+        companies.save(company);
+
+        owner.setRole(Role.COMPANY);
+        users.save(owner);
+        return company;
     }
 
     @Transactional

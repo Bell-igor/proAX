@@ -11,6 +11,7 @@ public record CabinetDto(
         List<ProposalDto> proposals,
         List<CompanySummaryDto> favorites,
         List<DocumentDto> documents,
-        long threadsCount
+        long threadsCount,
+        long legalIncoming
 ) {
 }

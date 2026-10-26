@@ -2047,3 +2047,156 @@ button, input, select, textarea {
     .chat-messages { padding: 14px 16px; }
     .chat-composer { padding: 12px 16px; }
 }
+
+/* ============================================================
+   Юридические услуги: каталог, заявки, эскроу
+   ============================================================ */
+
+.legal-layout {
+    display: grid;
+    grid-template-columns: 268px minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+}
+
+.legal-grid { display: flex; flex-direction: column; gap: 14px; }
+
+.legal-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.legal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+    border-color: var(--line-strong);
+}
+
+.legal-card__head { display: flex; gap: 12px; align-items: flex-start; }
+.legal-card__provider { font-weight: 700; font-size: .95rem; }
+.legal-card__provider:hover { text-decoration: underline; text-underline-offset: 3px; }
+.legal-card__title { margin: 0; font-size: 1.08rem; letter-spacing: -.015em; }
+.legal-card__desc { margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.55; }
+
+.legal-card__foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    margin-top: auto;
+}
+
+.legal-card__price {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: -.02em;
+}
+
+/* --------------------------------------------------------- заявки */
+
+.app-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+}
+
+.app-card__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.app-card__title { margin: 0 0 4px; font-size: 1.15rem; }
+.app-card__amount { text-align: right; }
+
+.app-card__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    gap: 24px;
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+}
+
+.escrow {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.escrow__amount {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.35rem;
+    letter-spacing: -.02em;
+}
+
+.otp {
+    margin-top: 16px;
+    background: var(--ink);
+    color: #F6F7F2;
+    border-radius: var(--radius);
+    padding: 16px 18px;
+}
+
+.otp .muted { color: rgba(246, 247, 242, .6); }
+
+.otp__code {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: .3em;
+    color: var(--lime);
+    margin: 6px 0;
+}
+
+/* --------------------------------------------------- переключатель */
+
+.auth-tabs {
+    display: flex;
+    gap: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
+.auth-tab {
+    flex: 1;
+    border: 0;
+    background: none;
+    padding: 9px 14px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: .9rem;
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.auth-tab:hover { color: var(--ink); }
+.auth-tab.is-active { background: var(--ink); color: #F6F7F2; }
+
+@media (max-width: 1024px) {
+    .legal-layout { grid-template-columns: 1fr; }
+    .app-card__body { grid-template-columns: 1fr; }
+    .app-card__amount { text-align: left; }
+}

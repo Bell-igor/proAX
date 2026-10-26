@@ -11,6 +11,7 @@ import need from './views/need.js';
 import cabinet from './views/cabinet.js';
 import admin from './views/admin.js';
 import chat from './views/chat.js';
+import { legalCatalog, legalApplications } from './views/legal.js';
 import { login, register } from './views/auth.js';
 import { industriesPage, howPage } from './views/pages.js';
 
@@ -52,6 +53,8 @@ route('/register', mount(register));
 route('/cabinet', mount(cabinet));
 route('/chat', mount(chat));
 route('/chat/:id', mount(chat));
+route('/legal', mount(legalCatalog));
+route('/legal/applications', mount(legalApplications));
 route('/admin', mount(admin));
 route('/how', mount(howPage));
 

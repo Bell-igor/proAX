@@ -18,6 +18,7 @@
         </a>
         <nav class="nav">
             <a href="#features">Возможности</a>
+            <a href="#legal">Юрстатус</a>
             <a href="#screens">Интерфейс</a>
             <a href="#stack">Стек</a>
             <a href="#run">Запуск</a>
@@ -102,6 +103,37 @@
         </div>
     </section>
 
+    <section class="section" id="legal">
+        <div class="container">
+            <div class="section-head">
+                <div class="eyebrow">Этап 1 · реализовано</div>
+                <h2>От частного лица к юридическому статусу</h2>
+                <p>Владелец актива приходит без компании: выбирает юрфирму рядом, подаёт заявку, согласует
+                    очную явку и платит через эскроу. Деньги уходят исполнителю только после того, как
+                    заказчик передаст одноразовый код.</p>
+            </div>
+            <div class="grid grid--2">
+                <div class="card">
+                    <h3>Как проходит сценарий</h3>
+                    <ol class="steps">
+                        <li>Регистрация как частное лицо — без юридического статуса.</li>
+                        <li>Каталог юруслуг: расстояние до фирмы, рейтинг, отзывы и платное продвижение.</li>
+                        <li>Заявка: будущая компания, город, отрасль, комплект документов.</li>
+                        <li>Юрфирма запрашивает документы и назначает очную явку.</li>
+                        <li>Оплата в эскроу — деньги удерживаются на площадке.</li>
+                        <li>Услуга оказана: заказчик получает код и передаёт его исполнителю.</li>
+                        <li>Код подтверждён — платёж выплачен, аккаунт становится юрлицом
+                            с готовой карточкой компании.</li>
+                    </ol>
+                </div>
+                <figure class="shot shot--tall">
+                    <img src="preview-applications.png" alt="Заявки на оформление статуса с эскроу-платежом" loading="lazy">
+                    <figcaption>Заявки: статусы, документы и защищённый платёж</figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
     <section class="section section--surface" id="screens">
         <div class="container">
             <div class="section-head">
@@ -145,9 +177,11 @@
                     <ul class="list">
                         <li><b>Java 21</b>, Spring Boot 3.2.2, Spring MVC</li>
                         <li>Spring Data JPA, Hibernate 6.4, H2 (профиль PostgreSQL)</li>
-                        <li>Сессии + PBKDF2-HMAC-SHA256, роли <code>ADMIN</code> и <code>COMPANY</code></li>
+                        <li>Сессии + PBKDF2-HMAC-SHA256, роли <code>ADMIN</code>, <code>PERSON</code>, <code>COMPANY</code></li>
+                        <li>Эскроу-леджер: удержание → одноразовый код → выплата или возврат</li>
+                        <li>Расстояние между городами по координатам, без внешних гео-сервисов</li>
                         <li>Планировщик снятия истёкших тарифов</li>
-                        <li>21 тест: JUnit 5, AssertJ, MockMvc</li>
+                        <li>27 тестов: JUnit 5, AssertJ, MockMvc</li>
                     </ul>
                 </div>
                 <div class="card">
@@ -189,12 +223,14 @@ java -jar target/proax.jar</code></pre>
                         <tr><th>Роль</th><th>Логин</th><th>Пароль</th></tr>
                         </thead>
                         <tbody>
+                        <tr><td>Частное лицо (2 заявки на статус)</td><td><code>person@proax.ru</code></td><td><code>person123</code></td></tr>
                         <tr><td>Компания «УралМеталл» (PRO)</td><td><code>demo@proax.ru</code></td><td><code>demo123</code></td></tr>
+                        <tr><td>Юрфирма «Право и Контур»</td><td><code>e.radova@example.ru</code></td><td><code>demo123</code></td></tr>
                         <tr><td>Администратор</td><td><code>admin@proax.ru</code></td><td><code>admin123</code></td></tr>
                         </tbody>
                     </table>
-                    <p class="muted">В демо: 19 компаний, 15 отраслей, 38 предложений, 12 заявок,
-                        3 диалога с перепиской, 2 компании на платных тарифах.</p>
+                    <p class="muted">В демо: 22 компании, 15 отраслей, 38 предложений, 12 заявок,
+                        3 диалога с перепиской, 4 юрфирмы и 12 юруслуг, 2 заявки на оформление статуса.</p>
                     <div class="note">
                         Эта страница — статическая витрина проекта. GitHub Pages не запускает Java-сервер:
                         приложение работает локально после клонирования репозитория.

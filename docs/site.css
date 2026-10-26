@@ -493,3 +493,45 @@ pre code { color: inherit; font-size: .86rem; }
 @media (prefers-reduced-motion: reduce) {
     * { transition-duration: .001ms !important; animation-duration: .001ms !important; }
 }
+
+/* Нумерованный сценарий на странице проекта */
+.steps {
+    counter-reset: step;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.steps li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 34px;
+    font-size: .9rem;
+    color: var(--ink-2);
+    line-height: 1.5;
+}
+
+.steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    background: var(--ink);
+    color: var(--lime);
+    font-family: var(--mono);
+    font-size: .72rem;
+    display: grid;
+    place-items: center;
+}
+
+.shot--tall img { height: 520px; }
+
+@media (max-width: 900px) {
+    .shot--tall img { height: 340px; }
+}

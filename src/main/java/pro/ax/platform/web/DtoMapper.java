@@ -5,6 +5,7 @@ import pro.ax.platform.domain.ChatMessage;
 import pro.ax.platform.domain.ChatThread;
 import pro.ax.platform.domain.Company;
 import pro.ax.platform.domain.CompanyDocument;
+import pro.ax.platform.domain.ApplicationDocument;
 import pro.ax.platform.domain.CompanySize;
 import pro.ax.platform.domain.Industry;
 import pro.ax.platform.domain.NeedRequest;
@@ -43,6 +44,8 @@ public class DtoMapper {
                 user.getEmail(),
                 user.getDisplayName(),
                 user.getRole().name(),
+                user.getCity(),
+                user.getPhone(),
                 company == null ? null : company.getId(),
                 company == null ? null : company.getSlug(),
                 company == null ? null : company.getName(),
@@ -223,6 +226,18 @@ public class DtoMapper {
     }
 
     public DocumentDto document(CompanyDocument document) {
+        return new DocumentDto(
+                document.getId(),
+                document.getTitle(),
+                document.getFileName(),
+                document.getContentType(),
+                document.getSize(),
+                document.getStoredPath(),
+                document.getCreatedAt()
+        );
+    }
+
+    public DocumentDto applicationDocument(ApplicationDocument document) {
         return new DocumentDto(
                 document.getId(),
                 document.getTitle(),

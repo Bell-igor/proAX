@@ -143,6 +143,26 @@ export const api = {
     billing: () => request('GET', '/api/billing'),
     upgrade: (plan) => request('POST', '/api/billing/upgrade', { plan }),
 
+    // юридические услуги и заявки на статус
+    legalServices: (params = {}) => request('GET', `/api/legal/services?${toQuery(params)}`),
+    legalStatuses: () => request('GET', '/api/legal/statuses'),
+    createLegalApplication: (data) => request('POST', '/api/legal/applications', data),
+    myLegalApplications: () => request('GET', '/api/legal/applications'),
+    incomingLegalApplications: () => request('GET', '/api/legal/applications/incoming'),
+    legalApplication: (id) => request('GET', `/api/legal/applications/${id}`),
+    payLegal: (id) => request('POST', `/api/legal/applications/${id}/pay`, {}),
+    cancelLegal: (id) => request('POST', `/api/legal/applications/${id}/cancel`, {}),
+    requestLegalDocuments: (id, comment) =>
+        request('POST', `/api/legal/applications/${id}/request-documents`, { comment }),
+    scheduleLegal: (id, appointmentAt) =>
+        request('POST', `/api/legal/applications/${id}/schedule`, { appointmentAt }),
+    completeLegal: (id) => request('POST', `/api/legal/applications/${id}/complete`, {}),
+    confirmLegal: (id, code) => request('POST', `/api/legal/applications/${id}/confirm`, { code }),
+    uploadLegalDocument: (id, formData) => upload(`/api/legal/applications/${id}/documents`, formData),
+    deleteLegalDocument: (id, documentId) =>
+        request('DELETE', `/api/legal/applications/${id}/documents/${documentId}`),
+    registerPerson: (data) => request('POST', '/api/auth/register-person', data),
+
     // админ
     adminPending: () => request('GET', '/api/admin/pending-companies'),
     adminVerify: (id, verified) => request('PATCH', `/api/admin/companies/${id}/verify`, { verified }),

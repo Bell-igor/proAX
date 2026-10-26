@@ -15,9 +15,10 @@ import java.util.Set;
 @Component
 public class ApiAccessInterceptor implements HandlerInterceptor {
 
-    private static final Set<String> PUBLIC_POST = Set.of("/api/auth/login", "/api/auth/register");
+    private static final Set<String> PUBLIC_POST = Set.of(
+            "/api/auth/login", "/api/auth/register", "/api/auth/register-person");
     private static final Set<String> PROTECTED_GET = Set.of(
-            "/api/favorites", "/api/cabinet", "/api/threads", "/api/billing");
+            "/api/favorites", "/api/cabinet", "/api/threads", "/api/billing", "/api/legal/applications");
 
     private final AuthService authService;
 

@@ -29,6 +29,13 @@ public class User {
     @Column(nullable = false, length = 120)
     private String displayName;
 
+    /** Город пользователя: нужен для подбора исполнителей «рядом». */
+    @Column(length = 80)
+    private String city;
+
+    @Column(length = 40)
+    private String phone;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private Role role = Role.COMPANY;
@@ -75,6 +82,22 @@ public class User {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public Role getRole() {

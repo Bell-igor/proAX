@@ -60,6 +60,7 @@ export default async function cabinet({ root, query }) {
 
     const render = () => {
         const company = data.company;
+        const hasCompany = Boolean(company);
         const counts = {
             offers: company ? company.offers.length : 0,
             needs: data.needs.length,
@@ -68,7 +69,12 @@ export default async function cabinet({ root, query }) {
             favorites: data.favorites.length
         };
 
-        const nav = TABS.map(([key, label]) => `
+        const visibleTabs = hasCompany ? TABS : [['profile', 'Профиль']];
+        if (!hasCompany && tab !== 'profile') {
+            tab = 'profile';
+        }
+
+        const nav = visibleTabs.map(([key, label]) => `
             <button class="cabinet-nav__item ${tab === key ? 'is-active' : ''}" data-tab="${key}">
                 <span>${label}</span>
                 ${counts[key] ? `<span class="cabinet-nav__count">${counts[key]}</span>` : ''}
@@ -80,7 +86,10 @@ export default async function cabinet({ root, query }) {
                     <div>
                         <div class="eyebrow">Личный кабинет</div>
                         <h1>${esc(data.user.displayName)}</h1>
-                        <p>${esc(data.user.email)}${data.user.admin ? ' · администратор площадки' : ''}</p>
+                        <p>${esc(data.user.email)}
+                            ${data.user.city ? ` · ${esc(data.user.city)}` : ''}
+                            ${data.user.admin ? ' · администратор площадки' : ''}
+                            ${!hasCompany && !data.user.admin ? ' · частное лицо' : ''}</p>
                     </div>
                     <div class="row">
                         ${company ? `<a class="btn btn--outline btn--sm" href="#/company/${esc(company.slug)}">Публичная страница</a>` : ''}
@@ -91,12 +100,20 @@ export default async function cabinet({ root, query }) {
 
             <div class="cabinet-layout">
                 <nav class="cabinet-nav">${nav}
+                    <a class="cabinet-nav__item" href="#/legal">Юруслуги</a>
+                    <a class="cabinet-nav__item" href="#/legal/applications">Заявки на статус</a>
+                    ${hasCompany ? `<a class="cabinet-nav__item" href="#/legal/applications?tab=incoming">
+                        Входящие заявки
+                        ${data.legalIncoming ? `<span class="cabinet-nav__count">${data.legalIncoming}</span>` : ''}
+                    </a>` : ''}
                     <a class="cabinet-nav__item" href="#/chat">Сообщения
                         ${data.threadsCount ? `<span class="cabinet-nav__count">${data.threadsCount}</span>` : ''}
                     </a>
                     ${data.user.admin ? '<a class="cabinet-nav__item" href="#/admin">Админ-панель →</a>' : ''}
                 </nav>
-                <div id="cabinet-body">${company ? renderTab(tab) : noCompanyBlock()}</div>
+                <div id="cabinet-body">
+                    ${hasCompany ? renderTab(tab) : (data.user.admin ? noCompanyBlock() : personBlock())}
+                </div>
             </div>
             <div style="height:48px"></div>
         </div>`;
@@ -137,9 +154,39 @@ export default async function cabinet({ root, query }) {
     const noCompanyBlock = () => `<div class="cabinet-card">
         ${emptyState('Нет карточки компании',
             'Аккаунт создан без компании. Заполните профиль, чтобы участвовать в каталоге и получать отклики.',
-            data.user.admin
-                ? '<a class="btn btn--dark" href="#/admin">Перейти в админ-панель</a>'
-                : '<a class="btn btn--dark" href="#/register">Зарегистрировать компанию</a>')}
+            '<a class="btn btn--dark" href="#/admin">Перейти в админ-панель</a>')}
+    </div>`;
+
+    /** Кабинет частного лица: профиль, юридический статус и путь к карточке компании. */
+    const personBlock = () => `<div class="cabinet-card">
+        <div class="cabinet-head">
+            <div><h2>Профиль частного лица</h2>
+                <p>Имя, контакты и город — по городу площадка подбирает исполнителей рядом</p></div>
+            <span class="badge badge--pending">без юридического статуса</span>
+        </div>
+
+        <dl class="kv">
+            <dt>Имя</dt><dd>${esc(data.user.displayName)}</dd>
+            <dt>E-mail</dt><dd>${esc(data.user.email)}</dd>
+            <dt>Город</dt><dd>${data.user.city ? esc(data.user.city) : 'не указан'}</dd>
+            <dt>Телефон</dt><dd>${data.user.phone ? esc(data.user.phone) : 'не указан'}</dd>
+        </dl>
+
+        <div class="divider"></div>
+
+        <h3>Следующий шаг — юридический статус</h3>
+        <p class="muted">Чтобы сдавать актив в аренду или работать с компаниями, нужен статус ИП, ООО
+            или самозанятого. Выберите юрфирму рядом: она подготовит документы, согласует очную явку,
+            а оплата уйдёт ей только после подтверждения услуги кодом.</p>
+        <div class="form-actions">
+            <a class="btn btn--primary" href="#/legal">Выбрать юрфирму</a>
+            <a class="btn btn--outline" href="#/legal/applications">Мои заявки</a>
+        </div>
+
+        <div class="form-note mt-24">
+            После подтверждения услуги площадка сама создаст карточку компании, и здесь появятся
+            предложения, заявки, отклики и документы.
+        </div>
     </div>`;
 
     const renderTab = (current) => {

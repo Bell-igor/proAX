@@ -11,6 +11,10 @@ import pro.ax.platform.domain.ChatThread;
 import pro.ax.platform.domain.Company;
 import pro.ax.platform.domain.CompanySize;
 import pro.ax.platform.domain.Industry;
+import pro.ax.platform.domain.LegalApplication;
+import pro.ax.platform.domain.LegalApplicationStatus;
+import pro.ax.platform.domain.LegalService;
+import pro.ax.platform.domain.LegalTargetStatus;
 import pro.ax.platform.domain.NeedRequest;
 import pro.ax.platform.domain.NeedStatus;
 import pro.ax.platform.domain.Offer;
@@ -26,6 +30,8 @@ import pro.ax.platform.repo.ChatMessageRepository;
 import pro.ax.platform.repo.ChatThreadRepository;
 import pro.ax.platform.repo.CompanyRepository;
 import pro.ax.platform.repo.IndustryRepository;
+import pro.ax.platform.repo.LegalApplicationRepository;
+import pro.ax.platform.repo.LegalServiceRepository;
 import pro.ax.platform.repo.NeedRequestRepository;
 import pro.ax.platform.repo.OfferRepository;
 import pro.ax.platform.repo.ProposalRepository;
@@ -64,12 +70,15 @@ public class SeedData implements CommandLineRunner {
     private final ChatThreadRepository threads;
     private final ChatMessageRepository messages;
     private final SubscriptionRepository subscriptions;
+    private final LegalServiceRepository legalServices;
+    private final LegalApplicationRepository legalApplications;
     private final PasswordHasher hasher;
 
     public SeedData(IndustryRepository industries, CompanyRepository companies, UserRepository users,
                     OfferRepository offers, NeedRequestRepository needs, ProposalRepository proposals,
                     ReviewRepository reviews, ChatThreadRepository threads, ChatMessageRepository messages,
-                    SubscriptionRepository subscriptions, PasswordHasher hasher) {
+                    SubscriptionRepository subscriptions, LegalServiceRepository legalServices,
+                    LegalApplicationRepository legalApplications, PasswordHasher hasher) {
         this.industries = industries;
         this.companies = companies;
         this.users = users;
@@ -80,6 +89,8 @@ public class SeedData implements CommandLineRunner {
         this.threads = threads;
         this.messages = messages;
         this.subscriptions = subscriptions;
+        this.legalServices = legalServices;
+        this.legalApplications = legalApplications;
         this.hasher = hasher;
     }
 
@@ -102,6 +113,7 @@ public class SeedData implements CommandLineRunner {
         seedProposals(needList, companyList);
         seedPlans(companyList);
         seedChats(needList, companyList);
+        seedLegal(companyList);
 
         log.info("Демо-данные готовы: {} компаний, {} заявок", companyList.size(), needList.size());
     }
@@ -389,7 +401,26 @@ public class SeedData implements CommandLineRunner {
                                         "Болты, гайки, шайбы по ГОСТ, фасовка от 1 000 штук."),
                                 new OfferSeed("СИЗ и спецодежда", OfferType.PRODUCT, "2400", "₽/комплект",
                                         "Костюмы, обувь, каски, перчатки. Нанесение логотипа.")
-                        ))
+                        )),
+                // Юридические фирмы для сценария «частное лицо → юридический статус»
+                new CompanySeed("Урал-Юст", "legal", "Екатеринбург", CompanySize.SMALL, 2016, true,
+                        "+7 (343) 288-14-05", "https://ural-just.ru",
+                        "Юридическое бюро в Екатеринбурге: регистрация ИП и ООО, самозанятость, сопровождение "
+                                + "сделок с недвижимостью и землёй. Берём на себя документы, подачу и очную явку.",
+                        "Наталья Крылова", "n.krylova@example.ru", "#C8F169",
+                        List.of()),
+                new CompanySeed("Сибирь-Право", "legal", "Новосибирск", CompanySize.SMALL, 2012, true,
+                        "+7 (383) 209-77-31", "https://sibir-pravo.ru",
+                        "Юридическая компания: оформление бизнеса, налоговые режимы, договоры аренды "
+                                + "производственных и складских площадей.",
+                        "Олег Мельник", "o.melnik@example.ru", "#93C5FD",
+                        List.of()),
+                new CompanySeed("Казанский юридический центр", "legal", "Казань", CompanySize.MICRO, 2019, false,
+                        "+7 (843) 250-63-18", "https://kazan-legal.ru",
+                        "Помогаем оформить статус самозанятого и ИП, подобрать налоговый режим, "
+                                + "подготовить договор аренды под сдачу помещения.",
+                        "Регина Хасанова", "r.khasanova@example.ru", "#F9A8D4",
+                        List.of())
         );
     }
 
@@ -438,7 +469,11 @@ public class SeedData implements CommandLineRunner {
                 new ReviewSeed(15, 2, 4, "Закрыли 12 вакансий операторов за месяц, двое заменены по гарантии."),
                 new ReviewSeed(16, 2, 5, "Аудит выявил узкое место на упаковке, после перестановки участка выпуск вырос на 18%."),
                 new ReviewSeed(17, 2, 4, "Оптимизировали тариф, экономия около 6% за квартал. Отчёт подробный."),
-                new ReviewSeed(11, 6, 4, "Сделали кампанию к выставке, лиды были качественные, но работа с ними легла на нас.")
+                new ReviewSeed(11, 6, 4, "Сделали кампанию к выставке, лиды были качественные, но работа с ними легла на нас."),
+                new ReviewSeed(19, 0, 5, "Оформили ООО за девять дней, сами подготовили документы и записали на подачу."),
+                new ReviewSeed(19, 2, 5, "Помогли выбрать между ИП и ООО под аренду склада, объяснили налоги."),
+                new ReviewSeed(20, 6, 4, "Сопровождали договор аренды помещения, правки внесли быстро."),
+                new ReviewSeed(21, 1, 5, "Оформили самозанятость за один день, всё дистанционно.")
         );
         for (ReviewSeed seed : seeds) {
             Company company = companyList.get(seed.companyIndex());
@@ -594,6 +629,8 @@ public class SeedData implements CommandLineRunner {
         Instant now = Instant.now();
         applyPlan(companyList.get(14), Plan.PREMIUM, now);
         applyPlan(companyList.get(0), Plan.PRO, now);
+        // Продвижение юрфирмы в каталоге услуг: видно в сортировке «рекомендуемые»
+        applyPlan(companyList.get(19), Plan.PRO, now);
     }
 
     private void applyPlan(Company company, Plan plan, Instant now) {
@@ -641,6 +678,79 @@ public class SeedData implements CommandLineRunner {
         messages.save(new ChatMessage(thread, sender, body));
         thread.registerMessage(body);
         threads.save(thread);
+    }
+
+    // -------------------------------------- юридические услуги и заявки
+
+    private void seedLegal(List<Company> companyList) {
+        Company moscow = companyList.get(8);
+        Company ural = companyList.get(19);
+        Company sibir = companyList.get(20);
+        Company kazan = companyList.get(21);
+
+        LegalService moscowSelf = service(moscow, LegalTargetStatus.SELF_EMPLOYED, 12000, 2);
+        service(moscow, LegalTargetStatus.IP, 45000, 5);
+        service(moscow, LegalTargetStatus.LLC, 78000, 10);
+        service(moscow, LegalTargetStatus.JSC, 210000, 25);
+
+        service(ural, LegalTargetStatus.SELF_EMPLOYED, 9900, 1);
+        service(ural, LegalTargetStatus.IP, 38000, 4);
+        LegalService uralLlc = service(ural, LegalTargetStatus.LLC, 69000, 9);
+
+        service(sibir, LegalTargetStatus.IP, 42000, 5);
+        service(sibir, LegalTargetStatus.LLC, 75000, 12);
+
+        service(kazan, LegalTargetStatus.IP, 35000, 3);
+        service(kazan, LegalTargetStatus.LLC, 65000, 7);
+        service(kazan, LegalTargetStatus.JSC, 195000, 20);
+
+        User person = new User("person@proax.ru", hasher.hash("person123"), "Иван Петров", Role.PERSON);
+        person.setCity("Екатеринбург");
+        person.setPhone("+7 (343) 000-11-22");
+        users.save(person);
+
+        LegalApplication scheduled = new LegalApplication(person, ural, uralLlc, LegalTargetStatus.LLC,
+                "ООО «УралСклад»", "Екатеринбург", "warehouse");
+        scheduled.setComment("Есть участок и склад 900 м², хочу сдавать в аренду как юрлицо. "
+                + "Нужна регистрация ООО и подсказка по налоговому режиму.");
+        scheduled.setAppointmentAt(Instant.now().plus(3, ChronoUnit.DAYS));
+        scheduled.setStatus(LegalApplicationStatus.SCHEDULED);
+        legalApplications.save(scheduled);
+
+        LegalApplication fresh = new LegalApplication(person, moscow, moscowSelf, LegalTargetStatus.SELF_EMPLOYED,
+                "ИП Петров И.И.", "Екатеринбург", "logistics");
+        fresh.setComment("Планирую легально сдавать часть склада под ответственное хранение.");
+        legalApplications.save(fresh);
+    }
+
+    private LegalService service(Company provider, LegalTargetStatus target, int price, int days) {
+        LegalService service = new LegalService(provider, titleFor(target), target);
+        service.setDescription(descriptionFor(target, days));
+        service.setPrice(BigDecimal.valueOf(price));
+        service.setDurationDays(days);
+        return legalServices.save(service);
+    }
+
+    private static String titleFor(LegalTargetStatus target) {
+        return switch (target) {
+            case SELF_EMPLOYED -> "Оформление самозанятости";
+            case IP -> "Регистрация ИП под ключ";
+            case LLC -> "Регистрация ООО под ключ";
+            case JSC -> "Регистрация акционерного общества";
+        };
+    }
+
+    private static String descriptionFor(LegalTargetStatus target, int days) {
+        return switch (target) {
+            case SELF_EMPLOYED -> "Постановка на учёт как самозанятого: консультация, подготовка заявления, "
+                    + "помощь с приложением «Мой налог». Срок — " + days + " раб. дн.";
+            case IP -> "Регистрация ИП: подбор кодов ОКВЭД и налогового режима, подготовка и подача документов, "
+                    + "сопровождение очной явки. Срок — " + days + " раб. дн.";
+            case LLC -> "Регистрация ООО: устав и протокол, заявление, подача в налоговую, открытие расчётного "
+                    + "счёта, печать. Срок — " + days + " раб. дн.";
+            case JSC -> "Регистрация акционерного общества: структура капитала, комплект документов, "
+                    + "регистрация выпуска акций. Срок — " + days + " раб. дн.";
+        };
     }
 
     private String uniqueSlug(String name) {
