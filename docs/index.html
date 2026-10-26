@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ProAX — B2B-экосистема на Java и Spring</title>
+    <meta name="description" content="ProAX — площадка, где встречается вся производственная цепочка: поставщики сырья, производство, логистика, склады, юристы, финансы и сервисы. Spring Boot, каталог, заявки, переписка, тарифы.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230D1522'/><path d='M9 24V8h7a5 5 0 0 1 0 10h-3v6z' fill='%23C8F169'/></svg>">
+    <link rel="stylesheet" href="site.css">
+</head>
+<body>
+<header class="site-header">
+    <div class="container site-header__inner">
+        <a class="brand" href="#top">
+            <span class="brand__mark">P</span>
+            <span class="brand__text">ProAX<span class="brand__dot">.</span></span>
+            <span class="brand__tag">b2b-экосистема</span>
+        </a>
+        <nav class="nav">
+            <a href="#features">Возможности</a>
+            <a href="#screens">Интерфейс</a>
+            <a href="#stack">Стек</a>
+            <a href="#run">Запуск</a>
+        </nav>
+        <a class="btn btn--primary btn--sm" href="https://github.com/Bell-igor/proAX">GitHub ↗</a>
+    </div>
+</header>
+
+<main id="top">
+    <section class="hero">
+        <div class="container hero__inner">
+            <div>
+                <div class="eyebrow">B2B-экосистема · производственная цепочка</div>
+                <h1>Площадка, где встречается вся <em>производственная цепочка</em></h1>
+                <p class="hero__lead">Поставщики сырья, заводы, перевозчики, склады, оборудование, упаковка, юристы,
+                    финансы и сервисы — в одном каталоге. Компании публикуют потребности, получают отклики
+                    и договариваются напрямую, без посредников.</p>
+                <div class="hero__actions">
+                    <a class="btn btn--primary" href="https://github.com/Bell-igor/proAX">Открыть код на GitHub</a>
+                    <a class="btn btn--ghost" href="#run">Как запустить</a>
+                </div>
+                <ul class="hero__meta">
+                    <li>Java 21</li>
+                    <li>Spring Boot 3.2.2</li>
+                    <li>JPA / Hibernate</li>
+                    <li>SPA без сборщика</li>
+                    <li>21 тест</li>
+                </ul>
+            </div>
+            <figure class="hero__shot">
+                <img src="preview-home.png" alt="Главная страница ProAX: поиск по каталогу и отрасли площадки">
+            </figure>
+        </div>
+    </section>
+
+    <section class="section" id="features">
+        <div class="container">
+            <div class="section-head">
+                <div class="eyebrow">Что внутри</div>
+                <h2>Рабочий маркетплейс, а не макет</h2>
+                <p>Шесть связанных сценариев: от регистрации компании до оплаты тарифа и внутренней переписки
+                    по заявке. Всё на реальных данных в базе, с ролями и проверкой прав.</p>
+            </div>
+            <div class="grid grid--3">
+                <article class="card">
+                    <div class="card__icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
+                    <h3>Каталог компаний</h3>
+                    <p>15 отраслей-ролей в цепочке, поиск по названию и городу, фильтры, сортировка,
+                        пагинация, рейтинг и отзывы.</p>
+                </article>
+                <article class="card">
+                    <div class="card__icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.5 12h5M9.5 16h3.5"/></svg></div>
+                    <h3>Заявки и отклики</h3>
+                    <p>Потребность с бюджетом и сроком, отклики с ценой, принятие предложения и статусы
+                        «открыта / в работе / закрыта».</p>
+                </article>
+                <article class="card">
+                    <div class="card__icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12.5h5"/></svg></div>
+                    <h3>Переписка по заявке</h3>
+                    <p>Диалог открывается откликом и привязан к паре «заявка + компания». Сообщения видят
+                        только две стороны.</p>
+                </article>
+                <article class="card">
+                    <div class="card__icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.3 1.1 6.1L12 17l-5.4 2.8 1.1-6.1L3.2 9.4l6.1-.8z"/></svg></div>
+                    <h3>Тарифы и продвижение</h3>
+                    <p>Базовый, PRO и Premium: приоритет в каталоге, бейдж в карточке, история платежей
+                        и автоматическое снятие по сроку.</p>
+                </article>
+                <article class="card">
+                    <div class="card__icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12.5l6.1-6.1a3.5 3.5 0 1 1 5 5L11 19.5a5.5 5.5 0 0 1-7.8-7.8l6.1-6.1"/></svg></div>
+                    <h3>Логотипы и документы</h3>
+                    <p>Загрузка логотипа вместо монограммы, приватные документы компании, раздача файлов
+                        через resource handler.</p>
+                </article>
+                <article class="card">
+                    <div class="card__icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/></svg></div>
+                    <h3>Кабинет и админка</h3>
+                    <p>Профиль, предложения, заявки, отклики, избранное; модерация компаний и статистика
+                        площадки для администратора.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section--surface" id="screens">
+        <div class="container">
+            <div class="section-head">
+                <div class="eyebrow">Интерфейс</div>
+                <h2>Экраны приложения</h2>
+                <p>Собственная дизайн-система: светлая «бумажная» база, графитовые панели, лаймовая
+                    подсветка действий и моноширинные технические подписи. Адаптив до 390 px.</p>
+            </div>
+            <div class="shots">
+                <figure class="shot">
+                    <img src="preview-catalog.png" alt="Каталог компаний с фильтрами и бейджами тарифов" loading="lazy">
+                    <figcaption>Каталог: фильтры, поиск, бейджи PRO и Premium</figcaption>
+                </figure>
+                <figure class="shot">
+                    <img src="preview-chat.png" alt="Переписка по заявке между заводом и поставщиком" loading="lazy">
+                    <figcaption>Переписка по заявке: диалог заказчика и подрядчика</figcaption>
+                </figure>
+                <figure class="shot">
+                    <img src="preview-cabinet.png" alt="Личный кабинет компании: профиль, логотип, документы" loading="lazy">
+                    <figcaption>Кабинет: профиль, логотип и документы компании</figcaption>
+                </figure>
+                <figure class="shot">
+                    <img src="preview-home.png" alt="Главная страница: поиск, отрасли, проверенные компании" loading="lazy">
+                    <figcaption>Главная: поиск, отрасли и проверенные участники</figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="stack">
+        <div class="container">
+            <div class="section-head">
+                <div class="eyebrow">Как устроено</div>
+                <h2>Стек и архитектура</h2>
+                <p>Классические слои Spring: домен → репозитории → сервисы → REST-контроллеры → SPA.
+                    Без Spring Security и Thymeleaf — сборка идёт из локального кэша Maven.</p>
+            </div>
+            <div class="grid grid--2">
+                <div class="card">
+                    <h3>Сервер</h3>
+                    <ul class="list">
+                        <li><b>Java 21</b>, Spring Boot 3.2.2, Spring MVC</li>
+                        <li>Spring Data JPA, Hibernate 6.4, H2 (профиль PostgreSQL)</li>
+                        <li>Сессии + PBKDF2-HMAC-SHA256, роли <code>ADMIN</code> и <code>COMPANY</code></li>
+                        <li>Планировщик снятия истёкших тарифов</li>
+                        <li>21 тест: JUnit 5, AssertJ, MockMvc</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Клиент</h3>
+                    <ul class="list">
+                        <li>SPA на ES-модулях: hash-роутер, свой fetch-слой</li>
+                        <li>Собственная CSS-дизайн-система, без npm и сборки</li>
+                        <li>Страницы: главная, каталог, компания, заявки, заявка, чат, кабинет, админка</li>
+                        <li>Загрузка логотипа и документов, предпросмотр, валидация форм</li>
+                        <li>Адаптив: десктоп 1440 px и мобильные 390 px</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section--surface" id="run">
+        <div class="container">
+            <div class="section-head">
+                <div class="eyebrow">Запуск</div>
+                <h2>Поднять локально</h2>
+                <p>Нужны JDK 21 и Maven. База H2 создаётся сама, демо-данные загружаются при первом запуске.</p>
+            </div>
+            <div class="grid grid--2">
+                <div class="card">
+                    <h3>Windows, одной командой</h3>
+                    <pre><code>git clone https://github.com/Bell-igor/proAX.git
+cd proAX
+.\run.cmd</code></pre>
+                    <p class="muted">Приложение откроется на <code>http://127.0.0.1:8080</code></p>
+                    <h3 class="mt">Любая ОС, через Maven</h3>
+                    <pre><code>mvn clean package
+java -jar target/proax.jar</code></pre>
+                </div>
+                <div class="card">
+                    <h3>Демо-доступ</h3>
+                    <table class="table">
+                        <thead>
+                        <tr><th>Роль</th><th>Логин</th><th>Пароль</th></tr>
+                        </thead>
+                        <tbody>
+                        <tr><td>Компания «УралМеталл» (PRO)</td><td><code>demo@proax.ru</code></td><td><code>demo123</code></td></tr>
+                        <tr><td>Администратор</td><td><code>admin@proax.ru</code></td><td><code>admin123</code></td></tr>
+                        </tbody>
+                    </table>
+                    <p class="muted">В демо: 19 компаний, 15 отраслей, 38 предложений, 12 заявок,
+                        3 диалога с перепиской, 2 компании на платных тарифах.</p>
+                    <div class="note">
+                        Эта страница — статическая витрина проекта. GitHub Pages не запускает Java-сервер:
+                        приложение работает локально после клонирования репозитория.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section--tight">
+        <div class="container">
+            <div class="cta">
+                <div>
+                    <h2>Код открыт</h2>
+                    <p>Spring Boot, JPA, собственный SPA и 21 тест — всё в репозитории. README описывает
+                        модель данных, API и тарифы.</p>
+                </div>
+                <div class="cta__actions">
+                    <a class="btn btn--primary" href="https://github.com/Bell-igor/proAX">GitHub</a>
+                    <a class="btn btn--ghost" href="https://github.com/Bell-igor/proAX/blob/main/README.md">README</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container site-footer__inner">
+        <div>
+            <div class="brand brand--footer">
+                <span class="brand__mark">P</span>
+                <span class="brand__text">ProAX<span class="brand__dot">.</span></span>
+            </div>
+            <p class="muted">Демонстрационный проект B2B-платформы на Java и Spring Boot.</p>
+        </div>
+        <div class="site-footer__links">
+            <a href="https://github.com/Bell-igor/proAX">Репозиторий</a>
+            <a href="https://github.com/Bell-igor/proAX/blob/main/README.md">Документация</a>
+            <a href="https://github.com/Bell-igor/proAX/issues">Issues</a>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

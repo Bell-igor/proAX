@@ -8,6 +8,8 @@
 Проект — рабочее веб-приложение: сервер на Spring Boot, база на JPA/Hibernate, интерфейс — SPA
 без сборщика (vanilla JS, ES-модули) и собственный дизайн.
 
+**Страница проекта:** <https://bell-igor.github.io/proAX/> · **Репозиторий:** <https://github.com/Bell-igor/proAX>
+
 ![Главная страница ProAX](docs/preview-home.png)
 
 ---
