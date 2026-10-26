@@ -10,6 +10,8 @@
 
 **Страница проекта:** <https://bell-igor.github.io/proAX/> · **Репозиторий:** <https://github.com/Bell-igor/proAX>
 
+**Продуктовая концепция:** [CONCEPT.md](CONCEPT.md) — путь владельца актива, эскроу, монетизация и roadmap.
+
 ![Главная страница ProAX](docs/preview-home.png)
 
 ---
