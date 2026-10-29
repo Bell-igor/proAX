@@ -59,17 +59,29 @@ export function initials(name) {
     return (parts[0][0] + parts[1][0]).toUpperCase();
 }
 
+/** Контрастный цвет текста для монограммы: тёмный на светлом, белый на насыщенном. */
+function inkFor(hex) {
+    const value = String(hex || '').replace('#', '');
+    if (value.length !== 6 || !/^[0-9a-f]{6}$/i.test(value)) return '#080407';
+    const r = parseInt(value.slice(0, 2), 16);
+    const g = parseInt(value.slice(2, 4), 16);
+    const b = parseInt(value.slice(4, 6), 16);
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance > 0.58 ? '#080407' : '#FFFFFF';
+}
+
 export function monogram(company, large = false) {
-    const accent = company.accentColor || '#C8F169';
+    const accent = company.accentColor || '#F37022';
     const sizeClass = large ? 'monogram--lg' : '';
+    const ink = inkFor(accent);
     if (company.logoUrl) {
-        return `<span class="monogram monogram--logo ${sizeClass}" style="--accent:${esc(accent)}">
+        return `<span class="monogram monogram--logo ${sizeClass}" style="--accent:${esc(accent)};color:${ink}">
                     <span class="monogram__initials">${esc(initials(company.name))}</span>
                     <img src="${esc(company.logoUrl)}" alt="${esc(company.name)}" loading="lazy"
                          onerror="this.remove()">
                 </span>`;
     }
-    return `<div class="monogram ${sizeClass}" style="--accent:${esc(accent)}">${esc(initials(company.name))}</div>`;
+    return `<div class="monogram ${sizeClass}" style="--accent:${esc(accent)};color:${ink}">${esc(initials(company.name))}</div>`;
 }
 
 /** Бейдж платного тарифа: показывается, пока продвижение активно. */

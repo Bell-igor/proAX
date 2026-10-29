@@ -1,20 +1,20 @@
 /* ProAX — страница проекта (GitHub Pages) */
 
 :root {
-    --paper: #F4F5F0;
+    --paper: #eae8e4;
     --surface: #FFFFFF;
-    --surface-2: #FAFBF7;
-    --ink: #0D1522;
-    --ink-2: #26303F;
-    --muted: #5E6875;
-    --line: #E2E5DD;
-    --line-strong: #CFD4C9;
-    --lime: #C8F169;
-    --lime-soft: #EDFAD1;
+    --surface-2: #f5f3ef;
+    --ink: #080407;
+    --ink-2: #241e22;
+    --muted: #6c646a;
+    --line: #ddd8d2;
+    --line-strong: #c9c3bb;
+    --accent: #f37022;
+    --accent-soft: #fde7d9;
     --radius: 14px;
     --radius-lg: 22px;
-    --shadow: 0 10px 30px -12px rgba(13, 21, 34, .18);
-    --shadow-lg: 0 30px 60px -30px rgba(13, 21, 34, .35);
+    --shadow: 0 10px 30px -12px rgba(8, 4, 7, .18);
+    --shadow-lg: 0 30px 60px -30px rgba(8, 4, 7, .35);
     --mono: ui-monospace, "Cascadia Mono", "SF Mono", Consolas, monospace;
     --sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
 }
@@ -64,7 +64,7 @@ img { max-width: 100%; display: block; }
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(13, 21, 34, .97);
+    background: rgba(8, 4, 7, .97);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, .08);
 }
@@ -80,7 +80,7 @@ img { max-width: 100%; display: block; }
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    color: #F6F7F2;
+    color: #f7f5f1;
     font-weight: 800;
     font-size: 1.28rem;
     letter-spacing: -.03em;
@@ -92,13 +92,13 @@ img { max-width: 100%; display: block; }
     width: 32px;
     height: 32px;
     border-radius: 9px;
-    background: var(--lime);
+    background: var(--accent);
     color: var(--ink);
     font-size: 1.05rem;
     font-weight: 900;
 }
 
-.brand__dot { color: var(--lime); }
+.brand__dot { color: var(--accent); }
 
 .brand__tag {
     font-family: var(--mono);
@@ -148,16 +148,16 @@ img { max-width: 100%; display: block; }
 .btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
 
 .btn--primary {
-    background: var(--lime);
-    border-color: var(--lime);
-    color: #0B1220;
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #080407;
     font-weight: 700;
 }
 
 .btn--ghost {
     background: transparent;
     border-color: rgba(255, 255, 255, .25);
-    color: #F6F7F2;
+    color: #f7f5f1;
 }
 
 .btn--sm { padding: 8px 14px; font-size: .86rem; }
@@ -166,7 +166,7 @@ img { max-width: 100%; display: block; }
 
 .hero {
     background: var(--ink);
-    color: #F6F7F2;
+    color: #f7f5f1;
     position: relative;
     overflow: hidden;
     padding: 72px 0 80px;
@@ -192,7 +192,7 @@ img { max-width: 100%; display: block; }
     right: -160px;
     top: -240px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(200, 241, 105, .2), transparent 62%);
+    background: radial-gradient(circle, rgba(243, 112, 34, .2), transparent 62%);
     pointer-events: none;
 }
 
@@ -205,7 +205,7 @@ img { max-width: 100%; display: block; }
 }
 
 .hero h1 { color: #fff; margin-bottom: 20px; }
-.hero h1 em { font-style: normal; color: var(--lime); }
+.hero h1 em { font-style: normal; color: var(--accent); }
 
 .eyebrow {
     display: flex;
@@ -215,7 +215,7 @@ img { max-width: 100%; display: block; }
     font-size: .72rem;
     text-transform: uppercase;
     letter-spacing: .16em;
-    color: var(--lime);
+    color: var(--accent);
     margin-bottom: 18px;
 }
 
@@ -325,7 +325,7 @@ img { max-width: 100%; display: block; }
     width: 7px;
     height: 7px;
     border-radius: 2px;
-    background: var(--lime);
+    background: var(--accent);
     border: 1px solid #9CC93F;
 }
 
@@ -417,7 +417,7 @@ pre code { color: inherit; font-size: .86rem; }
 
 .cta {
     background: var(--ink);
-    color: #F6F7F2;
+    color: #f7f5f1;
     border-radius: var(--radius-lg);
     padding: 44px 48px;
     display: grid;
@@ -436,18 +436,18 @@ pre code { color: inherit; font-size: .86rem; }
     width: 340px;
     height: 340px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(200, 241, 105, .18), transparent 65%);
+    background: radial-gradient(circle, rgba(243, 112, 34, .18), transparent 65%);
 }
 
 .cta h2 { color: #fff; margin-bottom: 10px; position: relative; }
 .cta p { color: rgba(246, 247, 242, .7); margin: 0; max-width: 52ch; position: relative; }
 .cta__actions { display: flex; gap: 10px; flex-wrap: wrap; position: relative; }
-.cta .btn--ghost { color: #F6F7F2; }
+.cta .btn--ghost { color: #f7f5f1; }
 
 /* ----------------------------------------------------------------- подвал */
 
 .site-footer {
-    background: #0A111C;
+    background: #0a0609;
     color: rgba(246, 247, 242, .78);
     padding: 40px 0;
     margin-top: 40px;
@@ -461,14 +461,14 @@ pre code { color: inherit; font-size: .86rem; }
     align-items: center;
 }
 
-.brand--footer { color: #F6F7F2; }
-.brand--footer .brand__mark { background: var(--lime); color: var(--ink); }
+.brand--footer { color: #f7f5f1; }
+.brand--footer .brand__mark { background: var(--accent); color: var(--ink); }
 .site-footer p { margin: 10px 0 0; font-size: .84rem; }
 .site-footer .muted { color: rgba(246, 247, 242, .45); }
 
 .site-footer__links { display: flex; gap: 20px; flex-wrap: wrap; font-size: .88rem; }
 .site-footer__links a { color: rgba(246, 247, 242, .8); }
-.site-footer__links a:hover { color: var(--lime); }
+.site-footer__links a:hover { color: var(--accent); }
 
 /* ---------------------------------------------------------------- адаптив */
 
@@ -523,7 +523,7 @@ pre code { color: inherit; font-size: .86rem; }
     height: 22px;
     border-radius: 7px;
     background: var(--ink);
-    color: var(--lime);
+    color: var(--accent);
     font-family: var(--mono);
     font-size: .72rem;
     display: grid;
@@ -535,3 +535,11 @@ pre code { color: inherit; font-size: .86rem; }
 @media (max-width: 900px) {
     .shot--tall img { height: 340px; }
 }
+
+.hero__presentation { margin: 14px 0 0; font-size: .86rem; }
+.hero__presentation a {
+    color: rgba(246, 247, 242, .72);
+    border-bottom: 1px solid rgba(243, 112, 34, .6);
+    padding-bottom: 1px;
+}
+.hero__presentation a:hover { color: var(--accent); }

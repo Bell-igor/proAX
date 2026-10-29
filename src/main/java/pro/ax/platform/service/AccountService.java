@@ -22,7 +22,7 @@ import java.util.Locale;
 public class AccountService {
 
     private static final List<String> ACCENTS = List.of(
-            "#C8F169", "#7EE0C2", "#FFB86B", "#A5B4FC", "#F9A8D4", "#93C5FD", "#FCD34D");
+            "#F37022", "#3F7D6E", "#C5621B", "#5F308C", "#8E5BA6", "#4C6FA8", "#C9A227");
 
     private final UserRepository users;
     private final CompanyRepository companies;
